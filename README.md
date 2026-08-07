@@ -32,7 +32,7 @@
 
 ## 效果
 
-![Frost Underlay on Hermes Desktop](assets/screenshot.jpg)
+![Frost Underlay on Hermes Desktop](assets/screenshot.png)
 
 ## 原理
 

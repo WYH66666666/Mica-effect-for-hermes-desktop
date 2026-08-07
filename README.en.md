@@ -32,7 +32,7 @@ Combined with a translucent Hermes window and a transparent-background theme, it
 
 ## Screenshot
 
-![Frost Underlay on Hermes Desktop](assets/screenshot.jpg)
+![Frost Underlay on Hermes Desktop](assets/screenshot.png)
 
 ## How it works
 
