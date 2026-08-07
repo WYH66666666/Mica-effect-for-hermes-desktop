@@ -3,7 +3,6 @@ node_modules/
 watch.log
 watch.heartbeat
 screen-dump.png
-*.png
 
 # 系统
 Thumbs.db
