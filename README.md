@@ -1,5 +1,5 @@
 # Hermes Desktop mica effect
-# Hermes Desktop毛玻璃效果
+# Hermes Desktop 毛玻璃效果
 使用前先将Hermes Desktop默认透明度改为百分之50
 给 **Hermes Desktop**（Hermes Agent 桌面客户端）垫一块 Windows 原生模糊背景板。用 DWM 内置的 Mica 材质做实时模糊——不截屏、不占额外 GPU、不碰窗口内容，只是一个垫在 Hermes 窗口正下方的「玻璃底」。
 
