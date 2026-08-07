@@ -1,9 +1,9 @@
-// FrostTracker — 事件驱动窗口跟随器
-// WinEventHook 监听目标窗口的移动/尺寸变化事件，触发时立即
+// FrostTracker — 事件驱动窗口跟随器（Hermes Desktop 专用）
+// WinEventHook 监听 Hermes 主窗口的移动/尺寸变化事件，触发时立即
 // 取真实边界（DWM 扩展帧边界，不含阴影边距）+ SetWindowPos 同步遮罩窗；
 // 30ms Timer 兜底防失步。
 // 用法: FrostTracker <overlayHwnd> [targetProcessName]
-//   targetProcessName 默认 Hermes；传任意进程名即跟随该进程的主窗口。
+//   targetProcessName 默认 Hermes。
 using System;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;

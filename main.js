@@ -1,10 +1,10 @@
-// Frost Underlay — 给任意窗口垫一块 Windows 原生模糊背景板
+// Frost Underlay — Hermes Desktop 专属毛玻璃背景板
 // 独立遮罩窗，用 DWM Mica/Acrylic 材质做实时模糊（不截屏、不占额外性能）。
-// 位置/尺寸由 FrostTracker.exe 事件驱动 SetWindowPos 同步到目标窗口正下方，
+// 位置/尺寸由 FrostTracker.exe 事件驱动 SetWindowPos 同步到 Hermes 主窗口正下方，
 // 拖拽/缩放/最小化/全屏全部实时跟随。窗口自身点击穿透，不拦截任何鼠标。
 //
 // 参数（环境变量，可选）：
-//   FROST_TARGET   跟随的目标进程名，默认 Hermes
+//   FROST_TARGET   跟随的目标进程名，默认 Hermes（设计为 Hermes 专用）
 //   FROST_MATERIAL 材质 mica|acrylic，默认 mica
 //   FROST_DARK     1 时强制系统深色模式（Mica 暗色变体）
 const { app, BrowserWindow, nativeTheme } = require('electron')
