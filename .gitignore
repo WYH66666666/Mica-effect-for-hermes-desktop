@@ -1,0 +1,10 @@
+# 运行产物 / 日志
+node_modules/
+watch.log
+watch.heartbeat
+screen-dump.png
+*.png
+
+# 系统
+Thumbs.db
+.DS_Store
