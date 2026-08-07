@@ -3,6 +3,12 @@
 
 > ⚠️ **使用前先将 Hermes Desktop 默认透明度改为百分之 50**
 > Before using: set Hermes Desktop's default window translucency to **50%**.
+>
+> ⚠️ **务必配合 Windhawk 的 Translucent Windows 插件使用**
+> **MUST be used together with the Windhawk "Translucent Windows" mod** —
+> it makes the Hermes window itself translucent (this project only provides the
+> blur backing, not the window transparency).
+> Windhawk: https://windhawk.net · Mod: https://windhawk.net/mods/windhawk-translucent-windows
 
 给 **Hermes Desktop**（Hermes Agent 桌面客户端）垫一块 Windows 原生模糊背景板。用 DWM 内置的 Mica 材质做实时模糊——不截屏、不占额外 GPU、不碰窗口内容，只是一个垫在 Hermes 窗口正下方的「玻璃底」。
 
@@ -82,7 +88,8 @@ Once the overlay appears, drag / resize / fullscreen Hermes and it follows in re
 
 ## 与 Hermes 搭配的完整玻璃效果 / Full glass setup with Hermes
 
-1. **Hermes 窗口透明度 50%**：文字仍清晰，桌面能透进来 / window translucency ~50% (text stays crisp, desktop glows through)
+1. **Windhawk Translucent Windows**：用该插件把 Hermes 窗口设为半透明（约 50%，文字仍清晰，桌面能透进来）
+   Use the Windhawk "Translucent Windows" mod to make the Hermes window ~50% translucent (text stays crisp, desktop glows through).
 2. **深色主题 + 透明背景**：界面半透明深色，压住 Mica 白雾不泛白 / dark theme + transparent UI background (suppresses Mica's white haze)
 3. **本项目的 Mica 遮罩垫底** / this project's Mica underlay
 4. **开机自启（可选）**：启动文件夹快捷方式指向 `watch.ps1` / optional autostart via Startup folder shortcut
