@@ -1,4 +1,4 @@
-# Hermes Desktop 毛玻璃效果
+# Hermes Desktop 毛玻璃效果（建议直接复制网址给agent叫它帮你装）
 
 > [English](README.en.md)
 
