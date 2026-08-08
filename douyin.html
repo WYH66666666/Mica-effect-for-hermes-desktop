@@ -1,0 +1,348 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>Hermes 毛玻璃 - 抖音图文</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: "Segoe UI", "Microsoft YaHei", system-ui, sans-serif;
+    background: #05080c;
+    color: #dce6f0;
+  }
+
+  /* ===== 每一页 ===== */
+  .slide {
+    width: 1920px;
+    height: 1200px;
+    position: relative;
+    overflow: hidden;
+    padding: 90px 110px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background:
+      radial-gradient(900px 600px at 12% -8%, rgba(0, 200, 232, 0.16), transparent 60%),
+      radial-gradient(800px 500px at 92% 15%, rgba(57, 197, 187, 0.13), transparent 55%),
+      radial-gradient(800px 700px at 50% 115%, rgba(0, 100, 140, 0.15), transparent 60%),
+      linear-gradient(160deg, #05080c, #0b0f14 60%, #06090d);
+  }
+  /* 光斑 */
+  .slide::before {
+    content: "";
+    position: absolute;
+    width: 460px; height: 460px;
+    border-radius: 50%;
+    filter: blur(90px);
+    background: radial-gradient(circle, rgba(0, 200, 232, 0.4), transparent 70%);
+    top: -120px; right: 8%;
+    opacity: 0.6;
+  }
+
+  /* 页码 */
+  .page-no {
+    position: absolute;
+    right: 60px; bottom: 40px;
+    font-size: 26px;
+    color: rgba(140, 170, 190, 0.7);
+    font-weight: 600;
+    letter-spacing: 0.1em;
+  }
+  .brand {
+    position: absolute;
+    left: 60px; bottom: 40px;
+    font-size: 24px;
+    color: #00c8e8;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+  }
+
+  /* 玻璃卡片 */
+  .glass {
+    background: rgba(16, 24, 32, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 24px;
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.2),
+      0 30px 60px -24px rgba(0, 0, 0, 0.65);
+  }
+
+  .kicker {
+    font-size: 30px;
+    color: #00c8e8;
+    letter-spacing: 0.25em;
+    font-weight: 700;
+    margin-bottom: 28px;
+  }
+  .title {
+    font-size: 96px;
+    font-weight: 900;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    background: linear-gradient(120deg, #ffffff 15%, #00c8e8 55%, #39c5bb);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .sub {
+    margin-top: 30px;
+    font-size: 40px;
+    color: #8aa0b2;
+    line-height: 1.6;
+  }
+
+  /* ===== 封面 ===== */
+  .cover .big-title {
+    font-size: 132px;
+    font-weight: 900;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    background: linear-gradient(120deg, #ffffff 10%, #00c8e8 50%, #39c5bb 90%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .cover .big-sub {
+    margin-top: 36px;
+    font-size: 46px;
+    color: #8aa0b2;
+  }
+  .cover .tag {
+    display: inline-block;
+    margin-top: 56px;
+    padding: 18px 40px;
+    border-radius: 999px;
+    font-size: 30px;
+    font-weight: 700;
+    color: #03121a;
+    background: linear-gradient(120deg, #00dcff, #39c5bb);
+    box-shadow: 0 16px 40px -12px rgba(0, 200, 232, 0.6);
+  }
+
+  /* ===== 必要条件 ===== */
+  .req-box { margin-top: 50px; padding: 44px 56px; }
+  .req-box h2 {
+    font-size: 44px; color: #ffb454; margin-bottom: 30px;
+  }
+  .req-list { list-style: none; counter-reset: r; }
+  .req-list li {
+    counter-increment: r;
+    display: flex; gap: 30px; align-items: flex-start;
+    padding: 26px 0;
+    font-size: 40px;
+    line-height: 1.5;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  .req-list li:last-child { border-bottom: none; }
+  .req-list li::before {
+    content: counter(r);
+    flex: 0 0 54px; height: 54px;
+    border-radius: 16px;
+    display: grid; place-items: center;
+    font-size: 28px; font-weight: 800;
+    color: #ffb454;
+    background: rgba(255, 180, 84, 0.13);
+    border: 1px solid rgba(255, 180, 84, 0.35);
+  }
+  .req-list b { color: #ffffff; }
+
+  /* ===== 特性 ===== */
+  .feat-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 30px;
+    margin-top: 50px;
+  }
+  .feat {
+    padding: 40px 36px;
+    border-radius: 24px;
+  }
+  .feat .icon { font-size: 52px; }
+  .feat h3 {
+    font-size: 38px; color: #00c8e8;
+    margin: 18px 0 12px; font-weight: 800;
+  }
+  .feat p { font-size: 27px; color: #8aa0b2; line-height: 1.55; }
+
+  /* ===== 截图页 ===== */
+  .shot-box { margin-top: 46px; padding: 22px; text-align: center; }
+  .shot-box img {
+    max-width: 100%;
+    max-height: 820px;
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+  }
+  .shot-cap { margin-top: 24px; font-size: 32px; color: #8aa0b2; }
+
+  /* ===== 原理 ===== */
+  .diagram {
+    margin-top: 46px;
+    padding: 44px 54px;
+    font-family: Consolas, monospace;
+    font-size: 32px;
+    line-height: 1.7;
+    color: #8aa0b2;
+    background: rgba(4, 10, 16, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 24px;
+  }
+
+  /* ===== 代码 ===== */
+  pre {
+    margin-top: 46px;
+    padding: 48px 56px;
+    font-family: Consolas, monospace;
+    font-size: 34px;
+    line-height: 1.8;
+    color: #a8d4e8;
+    background: rgba(4, 10, 16, 0.72);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 24px;
+    white-space: pre-wrap;
+  }
+
+  /* ===== 结尾 ===== */
+  .end-box { text-align: center; }
+  .end-box .big {
+    font-size: 88px; font-weight: 900;
+    background: linear-gradient(120deg, #fff, #00c8e8);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    margin-bottom: 30px;
+  }
+  .end-box .url {
+    font-size: 40px;
+    color: #00c8e8;
+    font-family: Consolas, monospace;
+    word-break: break-all;
+    padding: 30px 44px;
+  }
+  .end-box .follow {
+    margin-top: 56px;
+    font-size: 42px;
+    font-weight: 800;
+    color: #ffffff;
+    padding: 22px 52px;
+    border-radius: 999px;
+    background: linear-gradient(120deg, #00dcff, #39c5bb);
+    box-shadow: 0 16px 44px -12px rgba(0, 200, 232, 0.65);
+    display: inline-block;
+  }
+</style>
+</head>
+<body>
+
+<!-- 1 封面 -->
+<div class="slide cover">
+  <div class="kicker">WINDOWS 11 · DWM MICA · 零性能开销</div>
+  <div class="big-title">Hermes Desktop<br>毛玻璃效果</div>
+  <div class="big-sub">给 Hermes 桌面客户端垫一块原生模糊背景板<br>不截屏 · 不占 GPU · 实时紧贴</div>
+  <div class="tag">开源免费 · GitHub 可下载</div>
+  <div class="page-no">1 / 8</div>
+  <div class="brand">FROST UNDERLAY</div>
+</div>
+
+<!-- 2 必要条件 -->
+<div class="slide">
+  <div class="kicker">使用前必看</div>
+  <div class="title" style="font-size:64px;">🚨 必要条件（缺一不可）</div>
+  <div class="glass req-box">
+    <h2>满足这 4 条，效果才完整</h2>
+    <ol class="req-list">
+      <li><div><b>Windows 11</b>（22621+）— Mica 材质需要 Win11</div></li>
+      <li><div><b>Windhawk + Translucent Windows 插件</b> — 让 Hermes 窗口本身半透明</div></li>
+      <li><div><b>Hermes 窗口透明度 50%</b> — 文字清晰，桌面透进来</div></li>
+      <li><div><b>Hermes 深色模式</b> — 浅色主题下会泛白</div></li>
+    </ol>
+  </div>
+  <div class="page-no">2 / 8</div>
+  <div class="brand">FROST UNDERLAY</div>
+</div>
+
+<!-- 3 特性 -->
+<div class="slide">
+  <div class="kicker">它有多强</div>
+  <div class="title" style="font-size:64px;">六大特性</div>
+  <div class="feat-grid">
+    <div class="feat glass"><div class="icon">🪟</div><h3>实时跟随</h3><p>事件驱动，拖动/缩放/全屏紧贴，滞后 &lt;30ms</p></div>
+    <div class="feat glass"><div class="icon">🧊</div><h3>原生材质</h3><p>DWM Mica 系统模糊，零性能开销</p></div>
+    <div class="feat glass"><div class="icon">🖱️</div><h3>点击穿透</h3><p>遮罩不拦截鼠标，纯视觉垫底</p></div>
+    <div class="feat glass"><div class="icon">🕳️</div><h3>干净利落</h3><p>无阴影、无任务栏、无边框</p></div>
+    <div class="feat glass"><div class="icon">📐</div><h3>全屏不溢出</h3><p>真实边界同步，不溢到相邻屏</p></div>
+    <div class="feat glass"><div class="icon">🔄</div><h3>自愈守护</h3><p>被误杀自动复活，随 Hermes 启停</p></div>
+  </div>
+  <div class="page-no">3 / 8</div>
+  <div class="brand">FROST UNDERLAY</div>
+</div>
+
+<!-- 4 效果 -->
+<div class="slide">
+  <div class="kicker">实际效果</div>
+  <div class="title" style="font-size:64px;">桌面从模糊里透出来</div>
+  <div class="glass shot-box">
+    <img src="assets/screenshot.png" alt="效果图">
+  </div>
+  <div class="shot-cap">Hermes 半透明 + 遮罩垫底 = 毛玻璃质感</div>
+  <div class="page-no">4 / 8</div>
+  <div class="brand">FROST UNDERLAY</div>
+</div>
+
+<!-- 5 原理 -->
+<div class="slide">
+  <div class="kicker">原理</div>
+  <div class="title" style="font-size:64px;">三层结构，一个跟随器</div>
+  <div class="diagram">┌────────────────────────────┐
+│  Hermes Desktop（半透明）    │ ← 目标窗口
+├────────────────────────────┤
+│  遮罩窗 Frost Underlay      │ ← Electron 窗口
+│  （DWM Mica 材质）           │    点击穿透 · 无边框
+└────────────────────────────┘
+        ↓ 事件驱动 SetWindowPos
+   FrostTracker.exe（WinEventHook）</div>
+  <div class="page-no">5 / 8</div>
+  <div class="brand">FROST UNDERLAY</div>
+</div>
+
+<!-- 6 快速开始 -->
+<div class="slide">
+  <div class="kicker">三行命令跑起来</div>
+  <div class="title" style="font-size:64px;">快速开始</div>
+  <pre># 安装 electron
+npm install electron --save-dev
+
+# 一键启动，自动跟随 Hermes
+powershell -ExecutionPolicy Bypass -File start.ps1
+
+# 或手动
+npx electron .</pre>
+  <div class="page-no">6 / 8</div>
+  <div class="brand">FROST UNDERLAY</div>
+</div>
+
+<!-- 7 配置 -->
+<div class="slide">
+  <div class="kicker">按需调整</div>
+  <div class="title" style="font-size:64px;">配置项</div>
+  <div class="glass req-box" style="padding:40px 56px;">
+    <div style="font-size:34px;color:#8aa0b2;line-height:2.1;">
+      <b style="color:#39c5bb">FROST_TARGET</b>　　跟随的进程名　　　　默认 Hermes<br>
+      <b style="color:#39c5bb">FROST_MATERIAL</b>　　材质 mica / acrylic　　默认 mica<br>
+      <b style="color:#39c5bb">FROST_DARK</b>　　　　　1 = 跟随系统深色模式<br>
+      <b style="color:#39c5bb">ELECTRON_PATH</b>　　　electron.exe 路径　　　自动探测
+    </div>
+  </div>
+  <div class="page-no">7 / 8</div>
+  <div class="brand">FROST UNDERLAY</div>
+</div>
+
+<!-- 8 结尾 -->
+<div class="slide end-box">
+  <div class="kicker" style="text-align:center;">开源项目</div>
+  <div class="big">喜欢就给个 Star ⭐</div>
+  <div class="glass url">github.com/WYH66666666/Mica-effect-for-hermes-desktop</div>
+  <div class="follow">关注我 · 更多桌面美化</div>
+  <div class="page-no">8 / 8</div>
+  <div class="brand">FROST UNDERLAY</div>
+</div>
+
+</body>
+</html>

@@ -82,6 +82,19 @@ Once the overlay appears, drag / resize / fullscreen Hermes and it follows in re
 3. **This project's Mica underlay**
 4. **Autostart (optional)**: Startup folder shortcut pointing at `watch.ps1`
 
+## Hermes integration (optional, recommended)
+
+Bind the underlay to Hermes' lifecycle: **open Hermes → watcher auto-starts → underlay auto-fits**. No registry keys, no Startup folder, no action after reboot.
+
+Install `hermes-integration/frost-launch.js` (a Hermes desktop plugin — always loads when the app opens):
+
+```
+copy hermes-integration/frost-launch.js to <HERMES_HOME>/desktop-plugins/frost-launch/plugin.js
+(HERMES_HOME defaults to D:\Hermes) → restart Hermes
+```
+
+How it works: every 30s it checks `watch.heartbeat` (watch.ps1 writes a UTC timestamp every 2s) — if stale, it launches watch.ps1 via `hermesDesktop.terminal.start` (single-instance lock keeps it idempotent). When Hermes closes the watcher dies with the session; reopening Hermes restores it and cleans up any leftover overlay.
+
 ## Configuration
 
 | Env var | Description | Default |

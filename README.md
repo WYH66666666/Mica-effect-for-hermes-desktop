@@ -82,6 +82,19 @@ npx electron .     # 或 electron.exe main.js
 3. **本项目的 Mica 遮罩垫底**
 4. **开机自启（可选）**：启动文件夹快捷方式指向 `watch.ps1`
 
+## Hermes 集成（可选，推荐）
+
+把遮罩绑定到 Hermes 的生命周期：**Hermes 打开 → 自动拉起 watcher → 遮罩自动贴合**，不用注册表、不用启动文件夹、重启电脑也不用管。
+
+安装 `hermes-integration/frost-launch.js`（Hermes 桌面插件，应用打开必加载）：
+
+```
+复制 hermes-integration/frost-launch.js 到 <HERMES_HOME>/desktop-plugins/frost-launch/plugin.js
+（HERMES_HOME 默认 D:\Hermes）→ 重启 Hermes 生效
+```
+
+插件机制：每 30s 检查 `watch.heartbeat`（watch.ps1 每 2s 写入 UTC 时间戳）——心跳过期就通过 `hermesDesktop.terminal.start` 拉起 watch.ps1（单实例锁保证幂等）。Hermes 关闭时 watcher 随会话销毁，下次打开自动恢复并清理残留遮罩。
+
 ## 配置
 
 | 环境变量 | 说明 | 默认 |

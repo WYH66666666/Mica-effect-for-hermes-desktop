@@ -1,0 +1,413 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hermes Desktop 毛玻璃效果 — Frosted Glass for Hermes</title>
+<style>
+  :root {
+    --bg0: #05080c;
+    --bg1: #0b0f14;
+    --glass: rgba(16, 24, 32, 0.42);
+    --glass-strong: rgba(14, 22, 30, 0.62);
+    --stroke: rgba(0, 220, 255, 0.32);
+    --stroke-soft: rgba(255, 255, 255, 0.10);
+    --accent: #00c8e8;
+    --accent-soft: #39c5bb;
+    --text: #dce6f0;
+    --dim: #8aa0b2;
+    --warn: #ffb454;
+    --radius: 20px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: "Segoe UI", "Microsoft YaHei", system-ui, sans-serif;
+    color: var(--text);
+    line-height: 1.7;
+    background:
+      radial-gradient(1200px 800px at 15% -10%, rgba(0, 200, 232, 0.14), transparent 60%),
+      radial-gradient(1000px 700px at 90% 10%, rgba(57, 197, 187, 0.12), transparent 55%),
+      radial-gradient(900px 900px at 50% 120%, rgba(0, 100, 140, 0.14), transparent 60%),
+      linear-gradient(160deg, var(--bg0), var(--bg1) 60%, #06090d);
+    background-attachment: fixed;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ===== 液态玻璃光斑层（背景浮动光源，透过玻璃折射） ===== */
+  .aurora { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+  .aurora i {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(90px);
+    opacity: 0.55;
+    will-change: transform;
+  }
+  .aurora i:nth-child(1) {
+    width: 520px; height: 520px; left: -120px; top: -100px;
+    background: radial-gradient(circle, rgba(0, 200, 232, 0.55), transparent 70%);
+    animation: drift1 26s ease-in-out infinite alternate;
+  }
+  .aurora i:nth-child(2) {
+    width: 460px; height: 460px; right: -140px; top: 22%;
+    background: radial-gradient(circle, rgba(57, 197, 187, 0.5), transparent 70%);
+    animation: drift2 32s ease-in-out infinite alternate;
+  }
+  .aurora i:nth-child(3) {
+    width: 560px; height: 560px; left: 28%; bottom: -220px;
+    background: radial-gradient(circle, rgba(0, 140, 200, 0.42), transparent 70%);
+    animation: drift3 38s ease-in-out infinite alternate;
+  }
+  @keyframes drift1 { to { transform: translate(160px, 120px) scale(1.15); } }
+  @keyframes drift2 { to { transform: translate(-140px, 100px) scale(1.2); } }
+  @keyframes drift3 { to { transform: translate(120px, -140px) scale(1.1); } }
+
+  .wrap { position: relative; z-index: 1; max-width: 980px; margin: 0 auto; padding: 48px 24px 80px; }
+
+  /* ===== 液态玻璃面板：强模糊 + 折射饱和度 + 顶部高光 + 边缘光 ===== */
+  .glass {
+    position: relative;
+    background: var(--glass);
+    -webkit-backdrop-filter: blur(44px) saturate(1.8);
+    backdrop-filter: blur(44px) saturate(1.8);
+    border-radius: var(--radius);
+    border: 1px solid transparent;
+    background-clip: padding-box;
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.22),
+      inset 0 -1px 0 rgba(255, 255, 255, 0.05),
+      inset 1px 0 0 rgba(255, 255, 255, 0.06),
+      inset -1px 0 0 rgba(255, 255, 255, 0.06),
+      0 30px 60px -24px rgba(0, 0, 0, 0.65);
+  }
+  /* 渐变边缘光（液态玻璃描边） */
+  .glass::before {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(140deg,
+      rgba(255, 255, 255, 0.55),
+      rgba(0, 220, 255, 0.35) 30%,
+      rgba(255, 255, 255, 0.06) 60%,
+      rgba(57, 197, 187, 0.3));
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+  /* 顶部光泽带（玻璃反光） */
+  .glass::after {
+    content: "";
+    position: absolute;
+    top: 0; left: 8%; right: 8%;
+    height: 1.5px;
+    border-radius: 2px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.75), transparent);
+    opacity: 0.7;
+    pointer-events: none;
+  }
+
+  /* 悬浮光泽扫过（hover 时整面玻璃反光） */
+  .glass-sheen { position: relative; overflow: hidden; }
+  .glass-sheen::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(115deg, transparent 30%, rgba(255, 255, 255, 0.14) 48%, rgba(255, 255, 255, 0.02) 52%, transparent 70%);
+    transform: translateX(-120%);
+    transition: transform 0.9s ease;
+    pointer-events: none;
+  }
+  .glass-sheen:hover::before { transform: translateX(120%); }
+
+  /* 头部 */
+  header { text-align: center; padding: 72px 0 40px; }
+  .badge {
+    display: inline-block;
+    padding: 6px 16px;
+    border-radius: 999px;
+    font-size: 13px;
+    letter-spacing: 0.06em;
+    color: var(--accent);
+    background: rgba(0, 200, 232, 0.10);
+    border: 1px solid var(--stroke);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25), 0 0 24px -6px rgba(0, 200, 232, 0.5);
+    margin-bottom: 24px;
+  }
+  h1 {
+    font-size: clamp(34px, 6vw, 58px);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    background: linear-gradient(120deg, #ffffff 15%, var(--accent) 50%, var(--accent-soft) 85%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    filter: drop-shadow(0 2px 18px rgba(0, 200, 232, 0.35));
+  }
+  .subtitle {
+    margin-top: 14px;
+    font-size: 17px;
+    color: var(--dim);
+    max-width: 640px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .github-btn {
+    display: inline-block;
+    margin-top: 28px;
+    padding: 12px 30px;
+    border-radius: 999px;
+    text-decoration: none;
+    font-weight: 600;
+    color: #03121a;
+    position: relative;
+    background: linear-gradient(120deg, rgba(0, 220, 255, 0.9), rgba(57, 197, 187, 0.9));
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.5),
+      inset 0 -2px 6px rgba(0, 60, 90, 0.35),
+      0 14px 34px -10px rgba(0, 200, 232, 0.6);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  .github-btn:hover { transform: translateY(-2px); box-shadow: inset 0 1px 0 rgba(255,255,255,0.5), inset 0 -2px 6px rgba(0,60,90,0.35), 0 18px 40px -10px rgba(0, 200, 232, 0.8); }
+
+  /* 必要条件 */
+  .req { margin: 34px 0; padding: 28px 30px; }
+  .req h2 { font-size: 20px; color: var(--warn); margin-bottom: 4px; }
+  .req .note { color: var(--dim); font-size: 14px; margin-bottom: 16px; }
+  .req ol { list-style: none; counter-reset: r; }
+  .req li {
+    counter-increment: r;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    padding: 11px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  }
+  .req li:last-child { border-bottom: none; }
+  .req li::before {
+    content: counter(r);
+    flex: 0 0 26px;
+    height: 26px;
+    border-radius: 9px;
+    display: grid;
+    place-items: center;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--warn);
+    background: rgba(255, 180, 84, 0.14);
+    border: 1px solid rgba(255, 180, 84, 0.35);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  }
+  .req strong { color: var(--text); }
+  .req a { color: var(--accent); text-decoration: none; }
+  .req a:hover { text-decoration: underline; }
+
+  section { margin-top: 44px; }
+  h2.sec {
+    font-size: 22px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 18px;
+    text-shadow: 0 0 24px rgba(0, 200, 232, 0.25);
+  }
+  h2.sec::before {
+    content: "";
+    width: 6px; height: 22px;
+    border-radius: 3px;
+    background: linear-gradient(180deg, var(--accent), var(--accent-soft));
+    box-shadow: 0 0 12px rgba(0, 200, 232, 0.6);
+  }
+
+  /* 特性网格 */
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px; }
+  .card { padding: 22px 24px; transition: transform 0.18s ease; }
+  .card:hover { transform: translateY(-4px); }
+  .card .icon {
+    font-size: 24px;
+    display: inline-grid;
+    place-items: center;
+    width: 46px; height: 46px;
+    border-radius: 14px;
+    background: rgba(0, 200, 232, 0.10);
+    border: 1px solid var(--stroke);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25), 0 6px 18px -6px rgba(0, 200, 232, 0.4);
+  }
+  .card h3 { font-size: 15px; margin: 10px 0 6px; color: var(--accent); }
+  .card p { font-size: 13.5px; color: var(--dim); }
+
+  /* 截图 */
+  .shot { padding: 16px; text-align: center; }
+  .shot img {
+    max-width: 100%;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.2),
+      0 40px 80px -40px rgba(0, 0, 0, 0.85);
+  }
+  .shot figcaption { margin-top: 12px; font-size: 13px; color: var(--dim); }
+
+  /* 代码块 */
+  pre {
+    position: relative;
+    background: rgba(4, 10, 16, 0.66);
+    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    border-radius: 14px;
+    padding: 20px 22px;
+    overflow-x: auto;
+    font-size: 13px;
+    line-height: 1.65;
+    color: #a8d4e8;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  }
+  pre code { font-family: "Cascadia Code", Consolas, monospace; }
+  .diagram { color: var(--dim); }
+
+  /* 表格 */
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th, td { text-align: left; padding: 12px 16px; border-bottom: 1px solid rgba(255, 255, 255, 0.07); }
+  th { color: var(--accent); font-weight: 600; background: rgba(0, 200, 232, 0.06); }
+  td:first-child { font-family: Consolas, monospace; color: var(--accent-soft); }
+  .table-box { overflow-x: auto; padding: 4px; }
+
+  /* FAQ */
+  details {
+    padding: 16px 20px;
+    margin-bottom: 12px;
+  }
+  details summary {
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--text);
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  details summary::before { content: "▸"; color: var(--accent); transition: transform 0.15s; }
+  details[open] summary::before { transform: rotate(90deg); }
+  details p { margin-top: 10px; font-size: 14px; color: var(--dim); }
+
+  footer { text-align: center; margin-top: 60px; color: var(--dim); font-size: 13px; }
+  footer a { color: var(--accent); text-decoration: none; }
+</style>
+</head>
+<body>
+
+<!-- 液态玻璃光斑层 -->
+<div class="aurora"><i></i><i></i><i></i></div>
+
+<div class="wrap">
+
+  <header>
+    <div class="badge">DWM MICA · 事件驱动跟随 · 零性能开销</div>
+    <h1>Hermes Desktop 毛玻璃效果</h1>
+    <p class="subtitle">
+      给 Hermes Desktop 垫一块 Windows 原生模糊背景板 —— 不截屏、不占 GPU、不碰窗口内容，
+      只是一块实时紧贴的「玻璃底」，让桌面从模糊里透出来。
+    </p>
+    <a class="github-btn" href="https://github.com/WYH66666666/Mica-effect-for-hermes-desktop" target="_blank">★ GitHub 仓库</a>
+  </header>
+
+  <!-- 必要条件 -->
+  <div class="glass req glass-sheen">
+    <h2>🚨 必要条件（缺一不可）</h2>
+    <p class="note">缺任何一条，效果都会不完整或泛白。</p>
+    <ol>
+      <li><div><strong>Windows 11</strong>（22621+）—— Mica 材质需要 Win11</div></li>
+      <li><div><strong>Windhawk + Translucent Windows 插件</strong> —— 让 Hermes 窗口本身半透明（本项目只提供模糊垫底）。<a href="https://windhawk.net" target="_blank">Windhawk</a> → <a href="https://windhawk.net/mods/windhawk-translucent-windows" target="_blank">Translucent Windows</a></div></li>
+      <li><div><strong>Hermes 窗口透明度 50%</strong> —— 在 Windhawk 插件里设置，文字仍清晰、桌面能透进来</div></li>
+      <li><div><strong>Hermes 深色模式</strong> —— 玻璃效果依赖深色主题；浅色主题下 Mica 白雾会泛白</div></li>
+    </ol>
+  </div>
+
+  <!-- 特性 -->
+  <section>
+    <h2 class="sec">特性</h2>
+    <div class="grid">
+      <div class="glass card glass-sheen"><div class="icon">🪟</div><h3>实时跟随</h3><p>事件驱动（WinEventHook），拖动、缩放、最小化、最大化、全屏全部紧贴，最大滞后 &lt;30ms。</p></div>
+      <div class="glass card glass-sheen"><div class="icon">🧊</div><h3>原生材质</h3><p>Mica（Win11 系统材质），模糊和抗锯齿都由 DWM 完成，零性能开销。</p></div>
+      <div class="glass card glass-sheen"><div class="icon">🖱️</div><h3>点击穿透</h3><p>遮罩不拦截任何鼠标事件，纯粹视觉垫底。</p></div>
+      <div class="glass card glass-sheen"><div class="icon">🕳️</div><h3>无阴影无任务栏</h3><p>WS_EX_TOOLWINDOW 实例级样式，干净利落。</p></div>
+      <div class="glass card glass-sheen"><div class="icon">📐</div><h3>全屏不溢出</h3><p>DWMWA_EXTENDED_FRAME_BOUNDS 真实边界，最大化不会把 8px 阴影边距溢到相邻屏。</p></div>
+      <div class="glass card glass-sheen"><div class="icon">🔄</div><h3>自愈守护</h3><p>Hermes 重启自动重新绑定；遮罩被误杀自动复活；Hermes 退出自动关遮罩。</p></div>
+    </div>
+  </section>
+
+  <!-- 截图 -->
+  <section>
+    <h2 class="sec">效果</h2>
+    <figure class="glass shot">
+      <img src="assets/screenshot.png" alt="Hermes Desktop 毛玻璃效果展示">
+      <figcaption>Hermes 窗口半透明 + 遮罩垫底 = 毛玻璃质感，桌面从模糊里透出来</figcaption>
+    </figure>
+  </section>
+
+  <!-- 原理 -->
+  <section>
+    <h2 class="sec">原理</h2>
+    <pre class="diagram"><code>┌────────────────────────────┐
+│  Hermes Desktop（半透明）    │  ← 目标窗口
+├────────────────────────────┤
+│  遮罩窗 Frost Underlay      │  ← Electron 窗口
+│  （DWM Mica 材质）           │     点击穿透、无边框、无阴影
+└────────────────────────────┘
+        ↓ 事件驱动 SetWindowPos
+   FrostTracker.exe (WinEventHook)</code></pre>
+    <p style="color:var(--dim);font-size:13.5px;margin-top:12px;">
+      <b style="color:var(--text)">main.js</b> Electron 遮罩窗（Mica、点击穿透、自动拉起跟随器） ·
+      <b style="color:var(--text)">FrostTracker.exe</b> C# 跟随器（WinEventHook + 真实边界同步） ·
+      <b style="color:var(--text)">watch.ps1</b> 守护脚本（跟随 Hermes 启停，心跳供外部看门狗）
+    </p>
+  </section>
+
+  <!-- 快速开始 -->
+  <section>
+    <h2 class="sec">快速开始</h2>
+    <pre><code># 1. 安装 electron
+npm install electron --save-dev
+
+# 2. 一键启动，跟随 Hermes
+powershell -ExecutionPolicy Bypass -File start.ps1
+
+# 或手动
+npx electron .</code></pre>
+  </section>
+
+  <!-- 配置 -->
+  <section>
+    <h2 class="sec">配置</h2>
+    <div class="glass table-box">
+      <table>
+        <tr><th>环境变量</th><th>说明</th><th>默认</th></tr>
+        <tr><td>FROST_TARGET</td><td>跟随的进程名</td><td>Hermes</td></tr>
+        <tr><td>FROST_MATERIAL</td><td>材质：mica / acrylic</td><td>mica</td></tr>
+        <tr><td>FROST_DARK</td><td>1 = 跟随系统深色模式</td><td>亮色</td></tr>
+        <tr><td>ELECTRON_PATH</td><td>electron.exe 完整路径</td><td>自动探测</td></tr>
+      </table>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section>
+    <h2 class="sec">常见问题</h2>
+    <details class="glass glass-sheen"><summary>遮罩溢出到其他屏？</summary><p>已修复：跟随器优先取 DWMWA_EXTENDED_FRAME_BOUNDS（真实边界），最大化窗口不会带出阴影边距。</p></details>
+    <details class="glass glass-sheen"><summary>Mica 泛白？</summary><p>Mica 本身是浅色半透材质。请确认：Windhawk 透明 50% + 深色主题 + 界面半透明深色背景，即可压住白雾又不失玻璃感。</p></details>
+    <details class="glass glass-sheen"><summary>Hermes 重启后不跟随？</summary><p>FrostTracker 每 30ms 兜底轮询 + 事件驱动，进程重启自动重新绑定主窗口，无需手动干预。</p></details>
+  </section>
+
+  <footer>
+    <a href="https://github.com/WYH66666666/Mica-effect-for-hermes-desktop" target="_blank">github.com/WYH66666666/Mica-effect-for-hermes-desktop</a> · MIT License
+  </footer>
+
+</div>
+</body>
+</html>

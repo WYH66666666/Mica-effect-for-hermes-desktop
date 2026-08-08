@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>Hermes 毛玻璃 - 宣传海报</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: "Segoe UI", "Microsoft YaHei", system-ui, sans-serif;
+    color: #e8f0ee;
+    background: #0a0e12;
+  }
+
+  .poster {
+    width: 1920px;
+    height: 1200px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    padding: 70px 100px 60px;
+    background: linear-gradient(165deg, #0a0e12, #0d1318 70%, #0b1014);
+  }
+
+  /* 标题区 */
+  .head { text-align: center; }
+  .head .brand {
+    font-size: 24px;
+    color: #39c5bb;
+    font-weight: 700;
+    letter-spacing: 0.3em;
+    margin-bottom: 18px;
+  }
+  .head h1 {
+    font-size: 88px;
+    font-weight: 900;
+    letter-spacing: -0.01em;
+    color: #ffffff;
+    line-height: 1.15;
+  }
+  .head .sub {
+    margin-top: 16px;
+    font-size: 30px;
+    color: #9fb3bd;
+  }
+
+  /* 效果图（主角） */
+  .shot-wrap {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 34px 0 30px;
+    min-height: 0;
+  }
+  .shot-wrap img {
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    box-shadow: 0 40px 80px -40px rgba(0, 0, 0, 0.9);
+    display: block;
+  }
+
+  /* 信息行 */
+  .info {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    align-items: center;
+  }
+  .features {
+    display: flex;
+    gap: 22px;
+  }
+  .feat {
+    font-size: 26px;
+    color: #e8f0ee;
+    padding: 12px 26px;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    background: rgba(255, 255, 255, 0.05);
+  }
+  .feat b { color: #39c5bb; }
+  .req {
+    font-size: 24px;
+    color: #ffb454;
+  }
+  .req span { color: #9fb3bd; }
+  .url {
+    font-size: 24px;
+    color: #39c5bb;
+    font-family: Consolas, monospace;
+  }
+</style>
+</head>
+<body>
+
+<div class="poster">
+
+  <div class="head">
+    <div class="brand">FROST UNDERLAY · 开源免费</div>
+    <h1>Hermes Desktop 毛玻璃效果</h1>
+    <p class="sub">给 Hermes 桌面客户端垫一块原生模糊背景板 —— 桌面从模糊里透出来</p>
+  </div>
+
+  <div class="shot-wrap">
+    <img src="assets/screenshot.png" alt="Hermes Desktop 毛玻璃效果展示">
+  </div>
+
+  <div class="info">
+    <div class="features">
+      <div class="feat">🪟 实时跟随 <b>&lt;30ms</b></div>
+      <div class="feat">🧊 原生 Mica</div>
+      <div class="feat">🖱️ 点击穿透</div>
+      <div class="feat">🔄 自愈守护</div>
+    </div>
+    <div class="req">⚠️ 需要：<span>Win11 · Windhawk 透明 50% · 深色模式</span></div>
+    <div class="url">★ github.com/WYH66666666/Mica-effect-for-hermes-desktop</div>
+  </div>
+
+</div>
+
+</body>
+</html>
