@@ -63,6 +63,7 @@ class FrostTracker {
         if (hwnd == hermesHwnd || hermesHwnd == IntPtr.Zero) Sync();
     }
 
+    [STAThread]
     static void Main(string[] args) {
         if (args.Length < 1) return;
         overlayHwnd = new IntPtr(long.Parse(args[0]));
