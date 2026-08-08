@@ -29,10 +29,10 @@ function Log($msg) {
 }
 
 function Touch-Heartbeat {
-    if (-not (Test-Path $heartbeat)) {
-        New-Item -ItemType File -Path $heartbeat -Force | Out-Null
-    }
-    [System.IO.File]::SetLastWriteTimeUtc($heartbeat, [DateTime]::UtcNow)
+    # heartbeat file gets a UTC timestamp: the desktop plugin (renderer) reads it
+    # via readFileText to judge liveness (process queries unavailable in renderer)
+    $stamp = [DateTime]::UtcNow.ToString("o")
+    [System.IO.File]::WriteAllText($heartbeat, $stamp)
 }
 
 function Get-OverlayProc {
