@@ -1,4 +1,4 @@
-# Frosted Glass Effect for Hermes Desktop
+# Frosted Glass Effect for Hermes Desktop（Tip: just copy the URL and hand it to the agent — it'll install it for you）
 
 > [中文](README.md)
 
